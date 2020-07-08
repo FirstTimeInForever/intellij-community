@@ -16,7 +16,12 @@ import java.util.List;
 public interface MarkdownHtmlPanel extends Disposable {
   List<String> SCRIPTS = ContainerUtil.immutableList("processLinks.js", "scrollToElement.js");
 
-  List<String> STYLES = ContainerUtil.immutableList("default.css", "darcula.css", PreviewStaticServer.INLINE_CSS_FILENAME);
+  List<String> STYLES = ContainerUtil.immutableList(
+    "default.css",
+    "darcula.css",
+    PreviewStaticServer.INLINE_CSS_FILENAME,
+    PreviewStaticServer.OVERRIDES_CSS_FILENAME
+  );
 
   @NotNull
   JComponent getComponent();
