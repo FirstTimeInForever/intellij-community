@@ -22,6 +22,7 @@ import org.intellij.markdown.html.HtmlGenerator;
 import org.intellij.plugins.markdown.MarkdownBundle;
 import org.intellij.plugins.markdown.settings.MarkdownApplicationSettings;
 import org.intellij.plugins.markdown.ui.preview.MarkdownHtmlPanel;
+import org.intellij.plugins.markdown.ui.preview.PreviewColorThemeStyles;
 import org.intellij.plugins.markdown.ui.preview.PreviewStaticServer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -111,9 +112,12 @@ public class MarkdownJavaFxHtmlPanel extends JavaFxHtmlPanel implements Markdown
   @Override
   public void setCSS(@Nullable String inlineCss, String @NotNull ... fileUris) {
     PreviewStaticServer.getInstance().setInlineStyle(inlineCss);
-    myCssUris = inlineCss == null ? fileUris
+    PreviewStaticServer.getInstance().setColorThemeStyles(PreviewColorThemeStyles.createStylesheet());
+    String[] baseStyles =
+      ArrayUtil.mergeArrays(fileUris, PreviewStaticServer.getStyleUrl(PreviewStaticServer.COLOR_THEME_CSS_FILENAME));
+    myCssUris = inlineCss == null ? baseStyles
                                   : ArrayUtil
-                  .mergeArrays(fileUris, PreviewStaticServer.getStyleUrl(PreviewStaticServer.INLINE_CSS_FILENAME));
+                  .mergeArrays(baseStyles, PreviewStaticServer.getStyleUrl(PreviewStaticServer.INLINE_CSS_FILENAME));
     myCSP = PreviewStaticServer.createCSP(ContainerUtil.map(SCRIPTS, s -> PreviewStaticServer.getScriptUrl(s)),
                                           ContainerUtil.concat(
                                             ContainerUtil.map(STYLES, s -> PreviewStaticServer.getStyleUrl(s)),
