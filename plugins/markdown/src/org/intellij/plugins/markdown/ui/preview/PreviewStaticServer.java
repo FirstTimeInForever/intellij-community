@@ -29,14 +29,14 @@ import java.util.Objects;
 
 public class PreviewStaticServer extends HttpRequestHandler {
   public static final String INLINE_CSS_FILENAME = "inline.css";
-  public static final String OVERRIDES_CSS_FILENAME = "overrides.css";
+  public static final String COLOR_THEME_CSS_FILENAME = "colors.css";
   private static final Logger LOG = Logger.getInstance(PreviewStaticServer.class);
   private static final String PREFIX = "/4f800f8a-bbed-4dd8-b03c-00449c9f6698/";
 
   private byte @Nullable [] myInlineStyleBytes = null;
   private long myInlineStyleTimestamp = 0;
-  private byte @Nullable [] myStyleOverridesBytes = null;
-  private long myStyleOverridesTimestamp = 0;
+  private byte @Nullable [] myColorThemeStylesBytes = null;
+  private long myColorThemeStylesTimestamp = 0;
 
   public static PreviewStaticServer getInstance() {
     return HttpRequestHandler.Companion.getEP_NAME().findExtension(PreviewStaticServer.class);
@@ -71,9 +71,9 @@ public class PreviewStaticServer extends HttpRequestHandler {
     myInlineStyleTimestamp = System.currentTimeMillis();
   }
 
-  public void setStyleOverrides(@Nullable String overrides) {
-    myStyleOverridesBytes = overrides == null ? null : overrides.getBytes(StandardCharsets.UTF_8);
-    myStyleOverridesTimestamp = System.currentTimeMillis();
+  public void setColorThemeStyles(@Nullable String overrides) {
+    myColorThemeStylesBytes = overrides == null ? null : overrides.getBytes(StandardCharsets.UTF_8);
+    myColorThemeStylesTimestamp = System.currentTimeMillis();
   }
 
   @Override
@@ -109,8 +109,8 @@ public class PreviewStaticServer extends HttpRequestHandler {
       if (INLINE_CSS_FILENAME.equals(fileName)) {
         sendStyleFromMemory(myInlineStyleBytes, myInlineStyleTimestamp, request, context.channel());
       }
-      else if (OVERRIDES_CSS_FILENAME.equals(fileName)) {
-        sendStyleFromMemory(myStyleOverridesBytes, myStyleOverridesTimestamp, request, context.channel());
+      else if (COLOR_THEME_CSS_FILENAME.equals(fileName)) {
+        sendStyleFromMemory(myColorThemeStylesBytes, myColorThemeStylesTimestamp, request, context.channel());
       }
       else {
         sendResource(request,

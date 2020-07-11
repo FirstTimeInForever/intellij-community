@@ -29,7 +29,7 @@ public final class MarkdownApplicationSettings implements PersistentStateCompone
     ApplicationManager.getApplication().getMessageBus().connect().subscribe(LafManagerListener.TOPIC, lafListener);
     // Let's init proper CSS scheme
     ApplicationManager.getApplication().invokeLater(() -> {
-      MarkdownLAFListener.reinit(StartupUiUtil.isUnderDarcula());
+      MarkdownLAFListener.reinit();
     });
   }
 
@@ -58,8 +58,7 @@ public final class MarkdownApplicationSettings implements PersistentStateCompone
   @NotNull
   @Override
   public MarkdownCssSettings getMarkdownCssSettings() {
-    if (MarkdownCssSettings.DARCULA.getStylesheetUri().equals(myState.myCssSettings.getStylesheetUri())
-        || MarkdownCssSettings.DEFAULT.getStylesheetUri().equals(myState.myCssSettings.getStylesheetUri())) {
+    if (MarkdownCssSettings.DEFAULT.getStylesheetUri().equals(myState.myCssSettings.getStylesheetUri())) {
       return new MarkdownCssSettings(false,
                                      "",
                                      myState.myCssSettings.isTextEnabled(),
